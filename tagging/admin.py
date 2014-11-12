@@ -5,7 +5,16 @@ from django.core.urlresolvers import reverse
 from tagging import settings
 from tagging.forms import TagAdminForm
 
-admin.site.register(TaggedItem)
+class TaggedItemAdmin(admin.ModelAdmin):
+    model = TaggedItem
+    extra=0
+    fields = ('tag', 'content_type', 'object_id')
+    raw_id_fields = ['tag']
+    autocomplete_lookup_fields = {
+        'fk': ['tag'],
+        'generic': [['content_type', 'object_id']],
+        }
+admin.site.register(TaggedItem, TaggedItemAdmin)
 
 if settings.MULTILINGUAL_TAGS:
     import multilingual
